@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Posts by {{ author.username }}</h2>
+
+{% if posts %}
+    <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'blog_detail' post.id %}">{{ post.title }}</a> - {{ post.created_at|date:"F j, Y" }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>This author has no posts yet.</p>
+{% endif %}
+{% endblock %}

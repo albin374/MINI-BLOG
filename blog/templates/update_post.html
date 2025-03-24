@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 text-center">Edit Post</h2>
+            
+            <form method="post" enctype="multipart/form-data" class="card p-4 shadow">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">Title</label>
+                    {{ form.title }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_content" class="form-label">Content</label>
+                    {{ form.content }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_image" class="form-label">Upload Image</label>
+                    {{ form.image }}
+                </div>
+                <button type="submit" class="btn btn-success">Update Post</button>
+                <a href="{% url 'blog_detail' post.id %}" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom styles for form elements */
+    input[type="text"], textarea, input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        margin-top: 5px;
+    }
+
+    button {
+        border-radius: 8px;
+    }
+
+    .card {
+        border-radius: 12px;
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}

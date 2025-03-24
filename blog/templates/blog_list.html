@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Search Bar at the Top -->
+    <div class="row mb-4">
+        <div class="col-md-8 offset-md-2">
+            <form method="GET" action="{% url 'search_results' %}" class="form-inline justify-content-center">
+                <input class="form-control mr-2 w-75" type="search" name="q" placeholder="Search blogs..." aria-label="Search" required>
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="mb-4">All Blog Posts</h2>
+
+    {% for post in posts %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h4><a href="{% url 'blog_detail' post.id %}">{{ post.title }}</a></h4>
+                <p class="text-muted">by {{ post.author }} | {{ post.created_at|date:"F d, Y" }}</p>
+                <p>{{ post.content|truncatewords:20 }}</p>
+                <a href="{% url 'blog_detail' post.id %}" class="btn btn-primary">Read More</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No posts available. <a href="{% url 'create_post' %}">Create a new post</a>!</p>
+    {% endfor %}
+</div>
+{% endblock %}
