@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-bgu_=*oa$c+tfy77y&5yf-knu_3!3cb4493oh895ld@9x5ydiv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mini-blog-tgsl.onrender.com', 'localhost', '127.0.0.1' ]
 
 
 # Application definition
