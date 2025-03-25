@@ -76,12 +76,19 @@ WSGI_APPLICATION = 'blog_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# settings.py
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mini_blog_pf84',
+        'USER': 'mini_blog_pf84_user',
+        'PASSWORD': '0sTlydMf06XweRc9G3wSOLiOxaZjPxJH',
+        'HOST': 'dpg-cvh5lclsvqrc73b5oim0-a.oregon-postgres.render.com',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
