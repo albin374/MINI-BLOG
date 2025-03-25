@@ -1,8 +1,13 @@
-Django>=4.2,<5.0
-django-crispy-forms>=2.0
-pillow>=9.0.0  # For image uploads
-gunicorn>=20.1.0  # Optional: For deployment
-psycopg2>=2.9.0  # Only if using PostgreSQL, otherwise remove
-whitenoise>=6.0  # For serving static files in production
-dj-database-url>=1.0.0  # For managing database URL
-django-environ>=0.9.0  # For environment variables
+asgiref==3.8.1
+click==8.1.8
+colorama==0.4.6
+Django==5.1.7
+django-widget-tweaks==1.5.0
+gunicorn==23.0.0
+h11==0.14.0
+packaging==24.2
+pillow==11.1.0
+sqlparse==0.5.3
+tzdata==2025.2
+uvicorn==0.34.0
+whitenoise==6.9.0
