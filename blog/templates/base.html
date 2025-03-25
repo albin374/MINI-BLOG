@@ -89,7 +89,13 @@
 
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a href="{% url 'logout' %}" class="nav-link text-danger">🚪 Logout</a>
+                    <a href="{% url 'profile' %}" class="nav-link">👤 My Profile</a>
+                </li>
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}" style="margin: 0; padding: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link text-danger border-0 bg-transparent" style="width: 100%; text-align: left;">🚪 Logout</button>
+                    </form>
                 </li>
 
                 <!-- Admin Panel for Superusers -->

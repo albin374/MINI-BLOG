@@ -33,4 +33,7 @@ urlpatterns = [
     path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),  # Logout
     path('signup/', views.signup, name='signup'),  # Signup
     path('registration/register/', views.register, name='register'),  # Registration
+    
+    # Profile URL
+    path('profile/', views.profile, name='profile'),  # User profile
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

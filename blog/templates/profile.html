@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Profile Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            {% if profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'images/default_profile.png' %}" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            {% endif %}
+                            <h5>{{ user.username }}</h5>
+                            <p class="text-muted">{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-8">
+                            <h5>About Me</h5>
+                            <p>{{ profile.bio|default:"No bio added yet." }}</p>
+                            <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+                            <p><strong>Posts:</strong> {{ posts.count }}</p>
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#editProfileForm">
+                                Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Form (Collapsible) -->
+            <div class="collapse" id="editProfileForm">
+                <div class="card mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h4 class="mb-0">Edit Profile</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label for="{{ u_form.username.id_for_label }}">Username:</label>
+                                {{ u_form.username }}
+                                {{ u_form.username.errors }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ u_form.email.id_for_label }}">Email:</label>
+                                {{ u_form.email }}
+                                {{ u_form.email.errors }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ p_form.bio.id_for_label }}">Bio:</label>
+                                {{ p_form.bio }}
+                                {{ p_form.bio.errors }}
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="{{ p_form.profile_picture.id_for_label }}">Profile Picture:</label>
+                                {{ p_form.profile_picture }}
+                                {{ p_form.profile_picture.errors }}
+                            </div>
+                            
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User's Posts -->
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">My Posts</h4>
+                </div>
+                <div class="card-body">
+                    {% if posts %}
+                        <div class="list-group">
+                            {% for post in posts %}
+                                <a href="{% url 'blog_detail' post.id %}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ post.title }}</h5>
+                                        <small>{{ post.created_at|date:"F d, Y" }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ post.content|truncatechars:100 }}</p>
+                                    <small>Comments: {{ post.comments.count }} | Likes: {{ post.total_likes }}</small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            You haven't created any posts yet. <a href="{% url 'create_post' %}">Create your first post</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

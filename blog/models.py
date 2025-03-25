@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Post(models.Model):
@@ -45,3 +47,20 @@ class BloggerProfile(models.Model):
 
     def get_absolute_url(self):
         return reverse('author_detail', args=[str(self.user.id)])
+
+# Signal to create or update user profile when a user is created or updated
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    """Create a new profile when a new user is created"""
+    if created:
+        BloggerProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_profile(sender, instance, **kwargs):
+    """Update the profile when the user is updated"""
+    try:
+        if hasattr(instance, 'bloggerprofile'):
+            instance.bloggerprofile.save()
+    except:
+        # Create a profile if it doesn't exist
+        BloggerProfile.objects.create(user=instance)

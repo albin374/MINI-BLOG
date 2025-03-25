@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.http import JsonResponse
-from .models import Post, Comment
-from .forms import PostForm, CommentForm
+from django.db.models import Q
+from .models import Post, Comment, BloggerProfile
+from .forms import PostForm, CommentForm, UserUpdateForm, ProfileUpdateForm
 
 
 # Home page view with pagination and bloggers
@@ -187,10 +188,6 @@ def dislike_post(request, post_id):
 
     return JsonResponse({'likes': post.total_likes(), 'dislikes': post.total_dislikes(), 'disliked': disliked})
 
-from django.shortcuts import render
-from django.db.models import Q
-from .models import Post
-
 
 def search_results(request):
     query = request.GET.get('q')
@@ -199,13 +196,7 @@ def search_results(request):
     )
 
     return render(request, 'search_results.html', {'query': query, 'results': results})
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Post, Comment
 
-def blog_detail(request, blog_id):
-    post = get_object_or_404(Post, pk=blog_id)
-    return render(request, 'blog_detail.html', {'post': post})
 
 @login_required
 def add_comment(request, blog_id):
@@ -219,3 +210,32 @@ def add_comment(request, blog_id):
                 content=content
             )
     return redirect('blog_detail', blog_id=post.id)
+
+
+# User profile view and edit functionality
+@login_required
+def profile(request):
+    # Get or create user profile
+    profile, created = BloggerProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Your profile has been updated!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=profile)
+    
+    context = {
+        'u_form': u_form,
+        'p_form': p_form,
+        'profile': profile,
+        'posts': Post.objects.filter(author=request.user).order_by('-created_at')
+    }
+    
+    return render(request, 'profile.html', context)

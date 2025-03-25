@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post, Comment
+from .models import Post, Comment, BloggerProfile
 
 
 # Form for creating and updating blog posts
@@ -48,3 +48,32 @@ class UserRegisterForm(UserCreationForm):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.widget.attrs.update({'class': 'form-control'})
+
+
+# Form for updating user information
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdateForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})
+
+
+# Form for updating profile information
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = BloggerProfile
+        fields = ['bio', 'profile_picture']
+        
+    def __init__(self, *args, **kwargs):
+        super(ProfileUpdateForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.widgets.FileInput):
+                field.widget.attrs.update({'class': 'form-control-file'})
+            else:
+                field.widget.attrs.update({'class': 'form-control', 'rows': 5})
