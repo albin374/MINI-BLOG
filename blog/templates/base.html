@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     {% load static %}
     <script src="{% static 'js/likes.js' %}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Blog Site{% endblock %}</title>
-    
+
     <!-- Bootstrap 4.5.2 for styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
@@ -18,6 +19,7 @@
             margin: 0;
             padding: 0;
         }
+
         .sidebar {
             width: 200px;
             height: 100vh;
@@ -27,32 +29,42 @@
             left: 0;
             padding-top: 20px;
         }
+
         .sidebar h5 {
             text-align: center;
         }
+
         .sidebar .nav-link {
             color: #495057;
         }
+
         .sidebar .nav-link:hover {
             background-color: #e9ecef;
             border-radius: 5px;
         }
+
         .content {
             margin-left: 200px;
             padding: 20px;
         }
+
         .admin-btn {
             background-color: #ffc107;
             color: #343a40;
             border-radius: 25px;
             padding: 5px 12px;
             font-weight: bold;
+            text-align: center;
+            display: block;
         }
+
         .admin-btn:hover {
             background-color: #e0a800;
+            text-decoration: none;
         }
     </style>
 </head>
+
 <body>
 
     <!-- Main container with sidebar and content -->
@@ -60,7 +72,7 @@
 
         <!-- Sidebar -->
         <div class="sidebar p-3">
-            <h5 class="mb-4">Menu</h5>
+            <h5 class="mb-4">📚 Menu</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a href="{% url 'home' %}" class="nav-link">🏠 Home</a>
@@ -73,11 +85,20 @@
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'blogger_list' %}" class="nav-link">👥 All Bloggers</a>
-                </li>             
+                </li>
+
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a href="{% url 'logout' %}" class="nav-link text-danger">🚪 Logout</a>
                 </li>
+
+                <!-- Admin Panel for Superusers -->
+                {% if user.is_superuser %}
+                <li class="nav-item mt-3">
+                    <a class="admin-btn" href="/admin/">⚙️ Admin Panel</a>
+                </li>
+                {% endif %}
+
                 {% else %}
                 <li class="nav-item">
                     <a href="{% url 'login' %}" class="nav-link">🔐 Login</a>
@@ -86,19 +107,12 @@
                     <a href="{% url 'register' %}" class="nav-link">📝 Register</a>
                 </li>
                 {% endif %}
-                
-                <!-- Admin Login Button for Superusers -->
-                {% if user.is_superuser %}
-                <li class="nav-item mt-3">
-                    <a class="btn admin-btn" href="/admin/">⚙️ Login as Admin</a>
-                </li>
-                {% endif %}
             </ul>
         </div>
 
         <!-- Main content area -->
         <div class="content w-100">
-            
+
             <!-- Messages / Alerts -->
             {% if messages %}
             <div class="container">
@@ -122,9 +136,10 @@
     <!-- jQuery and Bootstrap scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Additional custom scripts -->
     {% block scripts %}
     {% endblock %}
 </body>
+
 </html>
